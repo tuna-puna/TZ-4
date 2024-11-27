@@ -3,21 +3,25 @@ package managers;
 import tasks.Epic;
 import tasks.SimpleTask;
 import tasks.Subtask;
-import static Status.StatusEnum.*;
+import static status.StatusEnum.NEW_TODO;
+import static status.StatusEnum.IN_PROGRESS;
+import static status.StatusEnum.DONE;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
     private Long nextID;
-    private final HashMap<Long, SimpleTask> simpleTasks;
-    private final HashMap<Long, Subtask> subtasks;
-    private final HashMap<Long, Epic> epics;
+    private final Map<Long, SimpleTask> simpleTasks;
+    private final Map<Long, Subtask> subtasks;
+    private final Map<Long, Epic> epics;
     private final InMemoryHistoryManager historyManager;
 
     public InMemoryTaskManager() {
-        this.nextID = 1L;
+        this.nextID = nextID = 1L;
         this.simpleTasks = new HashMap<>();
         this.subtasks = new HashMap<>();
         this.epics = new HashMap<>();
@@ -56,7 +60,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtask(Long id) {
         subtasks.remove(id);
     }
-
     public void removeEpic(Long id) {
 
         for (Long key : subtasks.keySet()) {
@@ -72,20 +75,20 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Long> updateSubtasksInEpic(Epic epic) {
-        ArrayList<Long> lisOfSubtaskIDs = new ArrayList<>();
+    public List<Long> updateSubtasksInEpic(Epic epic) {
+        List<Long> lisOfSubtaskIDs = new ArrayList<>();
         for (Long subtaskID : epic.getSubtaskIDs()) {
             Subtask subtask = subtasks.get(subtaskID);
             lisOfSubtaskIDs.add(subtask.getId());
         }
         epic.setSubtaskIDs(lisOfSubtaskIDs);
 
-        return (ArrayList<Long>) epic.getSubtaskIDs();
+        return epic.getSubtaskIDs();
     }
 
     @Override
-    public ArrayList<SimpleTask> getListSimpleTask() {
-        ArrayList<SimpleTask> list = new ArrayList<>();
+    public List<SimpleTask> getListSimpleTask() {
+        List<SimpleTask> list = new ArrayList<>();
         for (Long task : simpleTasks.keySet()) {
             list.add(simpleTasks.get(task));
         }
@@ -93,8 +96,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getListSubtask() {
-        ArrayList<Subtask> list = new ArrayList<>();
+    public List<Subtask> getListSubtask() {
+        List<Subtask> list = new ArrayList<>();
         for (Long task : subtasks.keySet()) {
             list.add(subtasks.get(task));
         }
@@ -102,8 +105,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getListEpic() {
-        ArrayList<Epic> list = new ArrayList<>();
+    public List<Epic> getListEpic() {
+        List<Epic> list = new ArrayList<>();
         for (Long task : epics.keySet()) {
             list.add(epics.get(task));
         }
@@ -121,7 +124,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Long add(Subtask task) {
         task.setId(nextID++);
         subtasks.put(task.getId(), task);
-        ArrayList<Long> newSubtaskList = updateSubtasksInEpic(epics.get(task.getEpicID()));
+        List<Long> newSubtaskList = updateSubtasksInEpic(epics.get(task.getEpicID()));
         Epic epic = epics.get(task.getEpicID());
         newSubtaskList.add(task.getId());
         epic.setSubtaskIDs(newSubtaskList);
@@ -133,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Long add(Epic epic) {
         epic.setId(nextID++);
         epic.setStatus(NEW_TODO);
-        ArrayList<Long> list = updateSubtasksInEpic(epic);
+        List<Long> list = updateSubtasksInEpic(epic);
         epic.setSubtaskIDs(list);
         epics.put(epic.getId(), epic);
         return epic.getId();
@@ -196,13 +199,13 @@ public class InMemoryTaskManager implements TaskManager {
         } else if (epics.containsKey(id)) {
             removeEpic(id);
         } else {
-            System.out.println("Такого id нет");
+            System.out.println("Нет такого id");
         }
     }
 
     @Override
-    public ArrayList<Subtask> getSubtaskListByEpicID(Long id) {
-        ArrayList<Subtask> currentList = new ArrayList<>();
+    public List<Subtask> getSubtaskListByEpicID(Long id) {
+        List<Subtask> currentList = new ArrayList<>();
         for (Long currentSubtask : epics.get(id).getSubtaskIDs()) {
             currentList.add(subtasks.get(currentSubtask));
         }

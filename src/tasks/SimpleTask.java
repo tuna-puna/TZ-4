@@ -1,6 +1,6 @@
 package tasks;
 
-import Status.StatusEnum;
+import status.StatusEnum;
 
 public class SimpleTask extends Task {
     public SimpleTask(String name, String description, StatusEnum status) {

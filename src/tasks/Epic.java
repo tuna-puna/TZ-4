@@ -1,10 +1,11 @@
 package tasks;
 
-import Status.StatusEnum;
+import status.StatusEnum;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    private ArrayList<Long> subtaskIDs;
+    private List<Long> subtaskIDs;
 
     public Epic(String name, String description) {
         super(0L, name, description);
@@ -21,11 +22,11 @@ public class Epic extends Task {
         subtaskIDs = new ArrayList<>();
     }
 
-    public ArrayList<Long> getSubtaskIDs() {
+    public List<Long> getSubtaskIDs() {
         return subtaskIDs;
     }
 
-    public void setSubtaskIDs(ArrayList<Long> subtaskIDs) {
+    public void setSubtaskIDs(List<Long> subtaskIDs) {
         this.subtaskIDs = subtaskIDs;
     }
 

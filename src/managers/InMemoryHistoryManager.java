@@ -3,10 +3,11 @@ package managers;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     public static final Integer SIZE_MAX_HISTORY = 10;
-    private static final ArrayList<Task> historyList = new ArrayList<>();
+    private static final List<Task> historyList = new ArrayList<>();
 
     @Override
     public void add(Task task) {
@@ -19,7 +20,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() { //    public List<Task> getHistory() {
-        return historyList;
+    public ArrayList<Task> getHistory() {
+        return new ArrayList<>(historyList);
     }
 }

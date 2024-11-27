@@ -1,6 +1,6 @@
 package main;
 
-import static Status.StatusEnum.*;
+import static status.StatusEnum.*;
 import managers.*;
 import tasks.Epic;
 import tasks.SimpleTask;

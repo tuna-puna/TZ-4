@@ -1,6 +1,6 @@
 package tasks;
 
-import Status.StatusEnum;
+import status.StatusEnum;
 
 public class Subtask extends Task {
     private final Long epicID;
